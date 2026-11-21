@@ -359,7 +359,7 @@ const camera=new THREE.PerspectiveCamera(50,1,0.1,450);
 scene.fog=new THREE.Fog(0xffffff,45,175);
 const hemi=new THREE.HemisphereLight(0xffffff,0x444444,0.6);scene.add(hemi);
 const sun=new THREE.DirectionalLight(0xffffff,0.9);sun.position.set(12,22,9);sun.castShadow=true;
-sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-16,right:16,top:16,bottom:-16,near:1,far:70});sun.shadow.bias=-0.0008;
+sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-16,right:16,top:16,bottom:-16,near:1,far:70});sun.shadow.bias=-0.0008;sun.shadow.normalBias=0.035;
 scene.add(sun);scene.add(sun.target);
 const amb=new THREE.AmbientLight(0xffffff,0.12);scene.add(amb);
 const fireLight=new THREE.PointLight(0xff8a30,0,14,1.5);scene.add(fireLight);
@@ -600,8 +600,7 @@ function hillMound(){const g=new THREE.Group(),win=W(),cave=S.house==='cave',tc=
   if(cave){// urwisko z łukowym wejściem
     const f=HILL.front,sh=new THREE.Shape();sh.moveTo(-HILL.nx,0);for(let i=0;i<=30;i++){const x=-HILL.nx+i/30*2*HILL.nx;sh.lineTo(x,hillH(x,f)-.03);}sh.lineTo(HILL.nx,0);sh.lineTo(-HILL.nx,0);
     const ar=new THREE.Path();ar.moveTo(-1.2,0);ar.lineTo(-1.2,1.5);ar.absarc(0,1.5,1.2,PI,0,true);ar.lineTo(1.2,0);ar.lineTo(-1.2,0);sh.holes.push(ar);
-    const face=new THREE.Mesh(new THREE.ShapeGeometry(sh,16),new THREE.MeshLambertMaterial({map:TX.rock,color:'#9a958d',side:THREE.DoubleSide}));face.position.z=f;g.add(face);
-    g.add(wallStrip(-1.9,1.5,1.9,1.5,ceil,(x,z)=>hillH(x,z)-.03,rockIn,8));}
+    const face=new THREE.Mesh(new THREE.ShapeGeometry(sh,16),new THREE.MeshLambertMaterial({map:TX.rock,color:'#9a958d',side:THREE.DoubleSide}));face.position.z=f;g.add(face);}
   else{g.add(wallStrip(-1.9,1.5,1.9,1.5,ceil,(x,z)=>hillH(x,z)-.03,earth,8));for(const s of[-1,1])g.add(wallStrip(s*1.9,1.5,s*2.3,1.5,z0,(x,z)=>hillH(x,z)-.03,earth,3));
     for(const zb of[-2.35,-1.25,-.15,.95]){let y=9;for(let x=-1.9;x<=1.9;x+=.2)y=Math.min(y,ceil(x,zb));y-=.1;g.add(logMesh(V(-1.88,y,zb),V(1.88,y,zb),.09));for(const s of[-1,1])g.add(cyl(V(s*1.78,0,zb),V(s*1.78,y,zb),.075,MT.bark,7));}}
   const stoneM=new THREE.MeshLambertMaterial({map:TX.rock,color:'#a8a49c',side:THREE.DoubleSide}),sg=stoneGeo();
@@ -1458,7 +1457,7 @@ $('#bMenu').addEventListener('click',()=>{
 
 
 /* ================= VERSION & LICENSE ================= */
-const VERSION='0.0.66';
+const VERSION='0.0.67';
 const RELEASE='2026-11-20';
 const MIT_THREE=`The MIT License
 
