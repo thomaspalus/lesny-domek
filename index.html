@@ -1300,11 +1300,19 @@ function genBg(){const k=genQ.shift();if(!k)return;if(!SND[k])SND[k]=[];if(SND[k
 setTimeout(genBg,1500);
 const AU={ctx:null,master:null,bufs:{},broken:false,sizzle:null};
 function auInit(){if(AU.ctx)return;try{const C=window.AudioContext||window.webkitAudioContext;AU.ctx=new C();AU.master=AU.ctx.createGain();AU.master.gain.value=SAVE.sound===false?0:.85;AU.master.connect(AU.ctx.destination);AU.bufs={};AU.sizzle=null;}catch(e){AU.ctx=null;}}
-function auRebuild(){try{AU.ctx.close();}catch(e){}AU.ctx=null;AU.broken=false;AU.wdCT=undefined;auInit();if(AU.ctx)AU.ctx.resume().catch(()=>{});}
-function auWake(){if(AU.ctx&&(AU.ctx.state==='interrupted'||AU.broken)){auRebuild();return;}auInit();const c=AU.ctx;if(c&&c.state!=='running'){c.resume().catch(()=>{AU.broken=true;});setTimeout(()=>{if(AU.ctx===c&&c.state!=='running')AU.broken=true;},600);}}
-['pointerdown','touchend','click','keydown'].forEach(ev=>addEventListener(ev,auWake,{passive:true,capture:true}));
-function auVisible(){const c=AU.ctx;if(!c)return;if(document.hidden){AU.hidden=true;c.suspend().catch(()=>{});return;}if(!AU.hidden)return;AU.hidden=false;c.resume().catch(()=>{});
-  setTimeout(()=>{const t0=c.currentTime;setTimeout(()=>{if(AU.ctx===c&&(c.state!=='running'||c.currentTime-t0<.15))AU.broken=true;},450);},150);}
+function auRebuild(){try{AU.ctx.close();}catch(e){}AU.ctx=null;AU.broken=false;AU.fresh=false;AU.tries=0;AU.wdCT=undefined;auInit();if(AU.ctx){AU.ctx.resume().catch(()=>{});if(S.act&&S.act.song){const s=snd('song',.5,undefined,1);if(s){s.s.loop=true;S.act.song=s;}else setTimeout(()=>{if(S.act&&S.act.song&&AU.ctx&&AU.ctx.state==='running'){const s2=snd('song',.5,undefined,1);if(s2){s2.s.loop=true;S.act.song=s2;}}},300);}}}
+function auPing(c){try{const b=c.createBuffer(1,1,22050),s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start(0);}catch(e){}}
+function auWake(e){const act=!e||e.type!=='pointerdown';
+  if(!act){if(AU.ctx&&AU.ctx.state==='suspended')AU.ctx.resume().catch(()=>{});return;}
+  if(AU.ctx&&(AU.fresh||AU.ctx.state==='interrupted'||AU.ctx.state==='closed'||AU.broken)){auRebuild();if(AU.ctx)auPing(AU.ctx);return;}
+  auInit();const c=AU.ctx;if(!c)return;auPing(c);if(c.state!=='running'){c.resume().catch(()=>{});AU.tries=(AU.tries||0)+1;setTimeout(()=>{if(AU.ctx===c&&c.state!=='running'&&AU.tries>2){AU.broken=true;AU.tries=0;}},600);}else AU.tries=0;}
+['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>addEventListener(ev,auWake,{passive:true,capture:true}));
+function auGain(){return SAVE.sound===false?0:.85;}
+function auVisible(){const c=AU.ctx;if(!c)return;
+  if(document.hidden){AU.hidden=true;try{AU.master.gain.cancelScheduledValues(c.currentTime);AU.master.gain.value=0;}catch(e){}return;}
+  if(!AU.hidden)return;AU.hidden=false;try{AU.master.gain.value=auGain();}catch(e){}
+  if(c.state==='interrupted'||c.state==='closed'){AU.broken=true;return;}if(c.state!=='running')c.resume().catch(()=>{});
+  setTimeout(()=>{if(AU.ctx!==c)return;if(c.state!=='running'){AU.broken=true;return;}const t0=c.currentTime;setTimeout(()=>{if(AU.ctx===c&&(c.state!=='running'||c.currentTime-t0<.15))AU.broken=true;},450);},250);}
 document.addEventListener('visibilitychange',auVisible);addEventListener('pageshow',auVisible);
 function snd(name,vol=1,pan,rate){const c=AU.ctx;if(!c||c.state!=='running'||SAVE.sound===false||!VARI[name])return null;const v=genOne(name),i=Math.floor(Math.random()*v.length),key=name+i;
   let b=AU.bufs[key];if(!b){b=c.createBuffer(1,v[i].length,ASR);b.getChannelData(0).set(v[i]);AU.bufs[key]=b;}
@@ -1314,7 +1322,7 @@ function sndAt(name,pos,vol=1,range=25){const dx=pos.x-P.pos.x,dz=pos.z-P.pos.z,
   const pan=d>.5?(dx*Math.cos(cam.theta)-dz*Math.sin(cam.theta))/d*.8:0;snd(name,g,pan);}
 function sizzleLevel(v){const c=AU.ctx;if(!c||c.state!=='running'||SAVE.sound===false){return;}if(!AU.sizzle){if(v<.01)return;const s=snd('sizzle',0,undefined,1);if(!s)return;s.s.loop=true;AU.sizzle=s;}AU.sizzle.g.gain.setTargetAtTime(v,c.currentTime,.08);}
 function stepSnd(){const v=.12*rnd(.85,1.1);if(P.level===1||P.inside)snd('stepWood',v);else if(W())snd('stepSnow',v);else if(pondE(P.pos.x,P.pos.z)<1.4)snd('stepSand',v);else snd('stepGrass',v);}
-function toggleSound(){SAVE.sound=SAVE.sound===false;store();if(AU.master)AU.master.gain.value=SAVE.sound===false?0:.85;refreshToggles();}
+function toggleSound(){SAVE.sound=SAVE.sound===false;store();if(AU.master)AU.master.gain.value=auGain();refreshToggles();}
 let natT=4,crackT=0,owlT=40;
 function natureTick(dt){if(S.phase==='menu'||!AU.ctx)return;
   const C=S.cook;if(FX&&FX.visible){crackT-=dt;if(crackT<=0){crackT=rnd(.07,.35);sndAt('crackle',FX.getWorldPosition(V(0,0,0)),.45,18);}}
@@ -1514,7 +1522,7 @@ $('#bMenu').addEventListener('click',()=>{
 
 
 /* ================= VERSION & LICENSE ================= */
-const VERSION='0.0.82';
+const VERSION='0.0.86';
 const RELEASE='2026-11-20';
 const MIT_THREE=`The MIT License
 
@@ -1748,7 +1756,7 @@ function loop(now){requestAnimationFrame(loop);const raw=(now-last)/1000,dt=Math
   // player + camera
   updatePlayer(dt);updateFish(dt);natureTick(dt);if(world&&P.g){updateMarks(dt);flockTick(dt);}
   {const Cz=S.cook;sizzleLevel(Cz&&Cz.stage==='cook'?(Cz.kind==='fire'?(Cz.pose>.6?(FOODS[Cz.id].ember?.1:.22):0):Cz.temp/100*.15):0);}
-  if(AU.ctx){AU.wd=(AU.wd||0)+dt;if(AU.wd>1.5){const c=AU.ctx;if(c.state==='running'&&AU.wdCT!==undefined&&c.currentTime-AU.wdCT<AU.wd*.4)AU.broken=true;AU.wdCT=c.state==='running'?c.currentTime:undefined;AU.wd=0;}}
+  if(AU.ctx){AU.wd=(AU.wd||0)+dt;if(AU.wd>1.5){const c=AU.ctx;if(c.state==='running'&&AU.wdCT!==undefined&&c.currentTime-AU.wdCT<AU.wd*.4)AU.broken=true;if(c.state==='suspended'&&!document.hidden&&SAVE.sound!==false)c.resume().catch(()=>{});AU.wdCT=c.state==='running'?c.currentTime:undefined;AU.wd=0;}}
   const C0=S.cook;let lockT=null;
   if(S.phase==='menu')lockT=S.house==='tree'?V(0,4,0):S.house==='rock'||S.house==='cave'?V(0,2.8,0):V(0,1.8,0);
   else if(S.phase==='cook'&&C0&&['build','ignite','food','cook','result'].includes(C0.stage))lockT=FP.clone().add(V(0,.6,0));
@@ -1806,7 +1814,7 @@ function loop(now){requestAnimationFrame(loop);const raw=(now-last)/1000,dt=Math
   if(decoAnim.star&&S.decor.xmas)decoAnim.star.rotation.y+=dt*1.5;
   if(world)world.children.forEach(o=>{if(o.userData.cloud){o.position.x+=dt*o.userData.sp;if(o.position.x>110)o.position.x=-110;}});
   // snow
-  if(snow.visible){const a=snowGeo.attributes.position.array;for(let i=0;i<SN;i++){a[i*3+1]-=dt*(1+(i%5)*.15);a[i*3]+=Math.sin(T+i)*dt*.25;if(a[i*3+1]<0){a[i*3+1]=25;a[i*3]=rnd(-30,30);a[i*3+2]=rnd(-30,30);}}snowGeo.attributes.position.needsUpdate=true;}
+  if(snow.visible){const a=snowGeo.attributes.position.array;const hc=HC(),cov=MOUNDED()||wallsBuilt(),hx=hc.W/2+.7,hz=hc.D/2+.7,hy=hc.y0+hc.H+1.9;for(let i=0;i<SN;i++){a[i*3+1]-=dt*(1+(i%5)*.15);a[i*3]+=Math.sin(T+i)*dt*.25;if(a[i*3+1]<0||(cov&&a[i*3+1]<hy&&Math.abs(a[i*3]-hc.x0)<hx&&Math.abs(a[i*3+2]-hc.z0)<hz)){a[i*3+1]=25;a[i*3]=rnd(-30,30);a[i*3+2]=rnd(-30,30);}}snowGeo.attributes.position.needsUpdate=true;}
   if(fireflies.visible&&fireflies.material.opacity>0){const a=ffGeo.attributes.position.array;for(let i=0;i<FF;i++){const b=ffBase[i];a[i*3]=b[0]+Math.sin(T*.6+b[3])*.8;a[i*3+1]=b[1]+Math.sin(T*1.3+b[3]*2)*.3;a[i*3+2]=b[2]+Math.cos(T*.5+b[3])*.8;}ffGeo.attributes.position.needsUpdate=true;}
   // ambient sounds
   renderer.render(scene,camera);}
