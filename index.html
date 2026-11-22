@@ -187,6 +187,7 @@ body.notools #tools{display:none}
     </div><div class="mc2">
     <button id="go" class="big green" style="margin-top:10px">Ruszamy! 🪓</button>
     <button id="bInfo" class="big ghost" style="margin-top:12px">ℹ️ Informacje i licencja</button>
+    <button id="bLang" class="big ghost" style="margin-top:10px">🇬🇧 English</button>
     <div class="ver" id="ver"></div>
   </div></div></div>
 </div>
@@ -196,6 +197,127 @@ body.notools #tools{display:none}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 'use strict';
+const EN={
+'Kłody':'Logs','Deski':'Planks','Patyki':'Sticks','Kamienie':'Stones','Mech':'Moss','Lina':'Rope','Glina':'Clay','Ryby':'Fish','Kora brzozowa':'Birch bark',
+'Ręka':'Hand','Siekiera':'Axe','Piła':'Saw','Nóż':'Knife','Saperka':'Shovel',
+'✋ Ręka – zbieraj kamienie':'✋ Hand – pick up stones','i mech':'and moss',
+'🪓 Siekiera – rąb powalone drzewa na kłody 🪵':'🪓 Axe – chop fallen trees into logs 🪵',
+'🪚 Piła – tnij kłody na deski 🟫 na koźle':'🪚 Saw – cut logs into planks 🟫 on the sawhorse',
+'🔪 Nóż – patyki z leszczyny, kora z brzozy, lina z pokrzyw':'🔪 Knife – sticks from hazel, bark from birch, rope from nettles',
+'🪏 Saperka – kop glinę 🟤 przy stawie':'🪏 Shovel – dig clay 🟤 by the pond',
+'złów w jeziorku – stuknij w wodę 🎣':'catch them in the lake – tap the water 🎣',
+'rąb powalone drzewa 🪓 siekierą':'chop fallen trees with the 🪓 axe',
+'tnij kłody na koźle 🪚 piłą':'cut logs on the sawhorse with the 🪚 saw',
+'tnij leszczynę 🔪 nożem':'cut hazel with the 🔪 knife',
+'zbieraj kamienie ✋ ręką':'pick up stones with your ✋ hand',
+'zbieraj mech ✋ ręką':'pick moss with your ✋ hand',
+'skręcaj linę z pokrzyw 🔪 nożem':'twist rope from nettles with the 🔪 knife',
+'kop glinę przy stawie 🪏 saperką':'dig clay by the pond with the 🪏 shovel',
+'zdejmij korę z brzozy 🔪 nożem':'peel bark from a birch with the 🔪 knife',
+'Powalone drzewo':'Fallen tree','Leszczyna':'Hazel','Brzoza':'Birch','Pokrzywy':'Nettles','Kozioł':'Sawhorse',
+'Platforma':'Platform','Drabinka':'Ladder','Ściany':'Walls','Dach z mchem':'Moss roof','Drzwi i okna':'Door and windows','Barierka':'Railing',
+'Kamienne schody':'Stone steps','Podłoga z desek':'Plank floor','Kamienna ścieżka':'Stone path','Rama z bali w wejściu':'Log frame in the entrance',
+'Ściana w otworze jaskini':'Wall in the cave mouth','Drzwi i okienko':'Door and little window','Pochodnie przy wejściu':'Torches by the entrance',
+'Komin przez skałę':'Chimney through the rock','Pale w jeziorze':'Posts in the lake','Pomost i kładka':'Pier and footbridge','Dach':'Roof',
+'Barierka i koło ratunkowe':'Railing and life ring','Rama wejścia z bali':'Log entrance frame','Ściana frontowa':'Front wall',
+'Okrągłe drzwi i okna':'Round door and windows','Darń i mech na dachu':'Turf and moss on the roof','Kamienny komin':'Stone chimney',
+'Fundament z kamieni':'Stone foundation','Ściany z bali':'Log walls','Uszczelnienie mchem':'Moss sealing',
+'Latarnia':'Lantern','Lampki':'Fairy lights','Flaga':'Flag','Burek':'Buddy','Drewno':'Woodpile','Pieniek':'Stump','Karmnik':'Bird feeder',
+'Ławka':'Bench','Hamak':'Hammock','Kwiaty':'Flowers','Kajak':'Kayak','Bałwan':'Snowman','Choinka':'Christmas tree','Sanki':'Sled',
+'Kiełbaska':'Sausage','Podpłomyk na kiju':'Bread on a stick','Podpłomyk':'Flatbread','Ziemniak z żaru':'Potato in the embers','Ziemniak':'Potato',
+'Pieczone jabłko':'Baked apple','Jabłko':'Apple','Pieczone mięsko':'Roast meat','Mięsko':'Meat','Chleb z pieca':'Oven bread','Chleb':'Bread',
+'Leśna pizza z grzybami':'Forest mushroom pizza','Pizza':'Pizza','Ryba na patyku':'Fish on a stick','Ryba':'Fish','Ryba z pieca':'Oven-baked fish',
+'Kora brzozowa ma w sobie olejki – zapala się nawet, gdy jest wilgotna!':'Birch bark has oils in it – it lights even when it is damp!',
+'Z włókien pokrzywy dawniej skręcano sznurki, a nawet tkano ubrania.':'Long ago people twisted string from nettle fibres and even wove clothes from them.',
+'Mech dobrze uszczelnia szpary między balami – w chatce jest cieplej.':'Moss seals the gaps between logs well – it keeps the cabin warmer.',
+'Prawdziwy traper bierze powalone drzewa i nie ścina żywych bez potrzeby.':'A real trapper uses fallen trees and never cuts living ones without need.',
+'Ognisko otacza się kamieniami, żeby ogień nie uciekł na trawę.':'Put stones around a campfire so the fire can’t escape into the grass.',
+'Nie bierz mokrych kamieni z wody do ogniska – mogą pęknąć od gorąca!':'Don’t use wet stones from the water for a fire – they can crack from the heat!',
+'Leszczyna daje proste i mocne patyki – idealne na kije do kiełbasek.':'Hazel gives straight, strong sticks – perfect for roasting sausages.',
+'Glina po wysuszeniu i wypaleniu twardnieje – robi się z niej piece i garnki.':'Clay gets hard after drying and firing – people make ovens and pots from it.',
+'Zawsze zalej ognisko wodą i sprawdź ręką nad popiołem, czy wystygło.':'Always pour water on the campfire and hold your hand over the ashes to check it’s cold.',
+'Nóż prowadź zawsze od siebie, a po pracy chowaj go do pochwy.':'Always cut away from yourself, and put the knife back in its sheath after work.',
+'Siekierą rąb na pieńku, a nie na ziemi – ostrze dłużej będzie ostre.':'Chop on a stump, not on the ground – the axe will stay sharp longer.',
+'Rozpałka: najpierw kora i cienkie patyczki, potem grubsze drewno.':'Lighting a fire: bark and thin twigs first, then thicker wood.',
+'Zimą ustaw schronienie wejściem tyłem do wiatru.':'In winter, build your shelter with the entrance facing away from the wind.',
+'Śnieg dobrze izoluje – w igloo jest cieplej niż na zewnątrz!':'Snow insulates well – it’s warmer inside an igloo than outside!',
+'Zimą pij ciepłe napoje i miej zapasowe suche skarpetki.':'In winter, drink warm drinks and carry spare dry socks.',
+'👀 Przeciągnij palcem, żeby się rozejrzeć.':'👀 Drag your finger to look around.','🛏️ Stuknij łóżko, żeby iść spać.':'🛏️ Tap the bed to go to sleep.',
+'Krótka drzemka…':'A short nap…','Dobranoc…':'Good night…','Słońce zachodzi…':'The sun is setting…','Świta, ptaki budzą się…':'Dawn is breaking, the birds are waking up…',
+'🌙 Ale się wyspałeś! Zrobił się wieczór.':'🌙 What a long sleep! It’s evening now.','☀️ Dzień dobry! Wyspałeś się jak prawdziwy traper.':'☀️ Good morning! You slept like a real trapper.',
+'👆 stuknij, żeby zamknąć':'👆 tap to close','🔨 Budujesz:':'🔨 Building:','✅ materiały zużyte · stukaj, aż stanie całe':'✅ materials used · keep tapping until it’s finished',
+'🔨 STUK!':'🔨 KNOCK!','🐟 Spławik nurkuje – ZATNIJ teraz!':'🐟 The float is diving – STRIKE now!',
+'Obserwuj czerwono-biały spławik. Gdy zanurkuje – zatnij!':'Watch the red-and-white float. When it dives – strike!',
+'Stukaj 🔨 STUK! – element po elemencie':'Tap 🔨 KNOCK! – piece by piece','Brakuje':'You need more','Masz wszystko! Stuknij 🔨 Buduj!':'You have everything! Tap 🔨 Build!',
+'Stukaj w dekoracje, żeby je postawić lub schować ✨':'Tap decorations to put them up or take them away ✨','Wybierz ognisko albo piec!':'Choose a campfire or an oven!',
+'Na ognisko brakuje':'For a campfire you need more','Stukaj 🔨 STUK! – układaj kamienie i drewno':'Tap 🔨 KNOCK! – lay the stones and wood',
+'Stukaj szybko krzesiwem, aż kora się zapali! ✨':'Tap the fire striker fast until the bark catches fire! ✨','Co pieczemy? 😋':'What shall we cook? 😋',
+'Ziemniak piecze się w żarze. Wyjmij go, gdy wskaźnik będzie na zielonym!':'The potato is baking in the embers. Take it out when the needle is on green!',
+'Przytrzymaj przycisk – jedzenie nad ogniem. Zdejmij, gdy będzie na zielonym!':'Hold the button – food over the fire. Take it off when it’s on green!',
+'Dorzucaj drewna, żeby piec był gorący (zielone pole)!':'Add wood to keep the oven hot (green zone)!','Smacznego! 🍽️':'Enjoy your meal! 🍽️',
+'Dobranoc, mały traperze! 🌙 Obracaj kamerę i podziwiaj gwiazdy':'Good night, little trapper! 🌙 Turn the camera and look at the stars',
+'BIERZE! Zatnij!':'A BITE! Strike!','czekaj, aż spławik zanurkuje':'wait for the float to dive','🎣 Łowienie ryb':'🎣 Fishing','🎣 ZATNIJ!':'🎣 STRIKE!','✖ Koniec':'✖ Stop',
+'Etap':'Step','🔨 Buduj!':'🔨 Build!','✨ Dekoracje':'✨ Decorations','– stuknij, żeby postawić':'– tap to put one up','Kolacja':'Dinner',
+'Gdzie upieczesz kolację?':'Where will you cook dinner?','🔥 Ognisko':'🔥 Campfire','🧱 Piec z gliny':'🧱 Clay oven','✨ Rozpal ogień – stukaj szybko!':'✨ Light the fire – tap fast!',
+'✨ KRZESIWO':'✨ FIRE STRIKER','surowe':'raw','👌 idealne':'👌 perfect','spalone':'burnt','🌡️ zimny':'🌡️ cold','gorący piec':'hot oven','za gorąco!':'too hot!',
+'🪵 Dorzuć drewna':'🪵 Add wood','🧤 Wyjmij':'🧤 Take out','🧤 Wyjmij z żaru':'🧤 Take out of the embers','🔥 Trzymaj nad ogniem':'🔥 Hold over the fire','✅ Zdejmij':'✅ Take off',
+'🔁 Jeszcze raz':'🔁 Again','😋 Zjedz!':'😋 Eat!','Pyszna kolacja! 🍽️ Zjedzone:':'Yummy dinner! 🍽️ Meals eaten:','🍳 Coś jeszcze':'🍳 Something else','🌙 Wieczór':'🌙 Evening',
+'🌙 Przytulny wieczór w lesie':'🌙 A cosy evening in the forest','🍳 Gotuj dalej':'🍳 Keep cooking','🗺️ Nowy etap':'🗺️ New level',
+'okonia':'a perch','płotkę':'a roach','pstrąga':'a trout','karasia':'a carp',
+'Najpierw skończ to, co robisz przy ognisku 🙂':'First finish what you’re doing at the campfire 🙂','🎣 Łowisz z pomostu!':'🎣 Fishing from the pier!',
+'🎣 Idziesz łowić ryby!':'🎣 Off to go fishing!','❄️ Wyrąbujesz przerębel w lodzie i zarzucasz wędkę!':'❄️ You chop a hole in the ice and cast your line!',
+'Nie udało się dojść do wody.':'Couldn’t get to the water.','Ryba zjadła przynętę i uciekła 🐟💨 Czekaj na następną!':'The fish ate the bait and swam away 🐟💨 Wait for the next one!',
+'✅ Zbudowane:':'✅ Built:','⚡ Tryb testowy: domek zbudowany od razu.':'⚡ Test mode: house built instantly.','🐕 Hau! Burek pilnuje domku.':'🐕 Woof! Buddy is guarding the house.',
+'🔥 Czas na kolację! Zbuduj ognisko albo piec.':'🔥 Dinner time! Build a campfire or an oven.','Ognisko':'Campfire','Piec z gliny':'Clay oven','✨ Teraz rozpal ogień!':'✨ Now light the fire!',
+'Najpierw złów rybę w jeziorku 🎣 – podejdź do wody i stuknij w nią.':'First catch a fish in the lake 🎣 – walk to the water and tap it.',
+'Mniam!':'Yum!','😋 Pycha!':'😋 Delicious!','🐕 Burek też dostał kawałek!':'🐕 Buddy got a piece too!',
+'domek na drzewie':'tree house','chatkę z bali':'log cabin','domek na skale':'house on the rock','ziemiankę w pagórku':'hillside dugout','domek nad wodą':'lakeside house',
+'domek w jaskini':'cave house','domek w pagórku':'hillside house','domek':'house','zimą':'in winter','latem':'in summer','🌙 Brawo!':'🌙 Well done!','Zbudowałeś':'You built a',
+', udekorowałeś go i ugotowałeś kolację jak prawdziwy traper!':', decorated it and cooked dinner like a real trapper!','🔥 Zostań przy ognisku':'🔥 Stay by the fire',
+'🎣 Brawo! Złowiłeś':'🎣 Well done! You caught','Za wcześnie! Poczekaj, aż spławik zanurkuje 🙂':'Too early! Wait until the float dives 🙂',
+'Prawie surowe! 😬 Potrzymaj dłużej.':'Almost raw! 😬 Hold it longer.','Trochę niedopieczone, ale da się zjeść 🙂':'A bit underdone, but you can eat it 🙂',
+'IDEALNIE upieczone! Pycha! 😋':'PERFECTLY cooked! Delicious! 😋','Mocno przypieczone, ale chrupiące 😄':'Very crispy, but crunchy 😄','Ups! Przypalone na węgielek 😅':'Oops! Burnt to a crisp 😅',
+'🔥 Ogień płonie! Brawo!':'🔥 The fire is burning! Well done!','🏠 Domek gotowy!':'🏠 The house is ready!',
+'Świetna robota, budowniczy! Teraz udekoruj swój':'Great job, builder! Now decorate your',', a potem upiecz kolację.':', and then cook dinner.','✨ Dekorujemy!':'✨ Let’s decorate!',
+'⌨️ WASD – chodzisz, myszką się rozglądasz, klik w rzecz – zbierasz. 1–5 narzędzia, Spacja – stuk! Niebieski kształt to plan budowy.':'⌨️ WASD – walk, mouse – look around, click a thing – collect it. 1–5 tools, Space – knock! The blue shape is the building plan.',
+'👈 Lewy kciuk – chodzisz, 👉 prawy – rozglądasz się. Stuknij rzecz z ikonką, a podejdziesz i ją zbierzesz! Niebieski kształt to plan budowy.':'👈 Left thumb – walk, 👉 right thumb – look around. Tap a thing with an icon and you’ll walk over and collect it! The blue shape is the building plan.',
+'👁️ Widok z oczu trapera':'👁️ Trapper’s-eye view','🧍 Widok zza pleców':'🧍 Over-the-shoulder view','👁️ Widok z oczu':'👁️ First-person view',
+'☀️ Dzień':'☀️ Day','🌙 Noc':'🌙 Night','🔇 Dźwięki: wył.':'🔇 Sound: off','🔊 Dźwięki: wł.':'🔊 Sound: on',
+'„🗺️ Etapy” wraca do wyboru etapu – ten domek zacznie się od nowa.':'“🗺️ Levels” takes you back to choosing a level – this house will start over.',
+'Leśny Domek · wersja':'Forest Cabin · version','↩️ Graj dalej':'↩️ Keep playing','🗺️ Etapy':'🗺️ Levels','ℹ️ Informacje i licencja':'ℹ️ Info and license',
+'🏕️ Leśny Domek':'🏕️ Forest Cabin','Leśny Domek':'Forest Cabin','Wersja:':'Version:','Data wydania:':'Release date:','Prawa autorskie:':'Copyright:',
+'© 2026 Tomasz Palus. Wszelkie prawa zastrzeżone, z wyjątkiem elementów zewnętrznych wymienionych niżej, które podlegają własnym licencjom.':'© 2026 Tomasz Palus. All rights reserved, except for the third-party components listed below, which are covered by their own licenses.',
+'Gatunek / wiek:':'Genre / age:','gra budowlano-przygodowa 3D dla dzieci (ok. 7–12 lat). Brak przemocy, reklam i zakupów w grze.':'3D building and adventure game for children (about 7–12 years). No violence, ads or in-game purchases.',
+'🧩 Elementy zewnętrzne (licencje)':'🧩 Third-party components (licenses)',
+'– biblioteka 3D, licencja MIT (pełny tekst poniżej). Ładowana z cdnjs.cloudflare.com.':'– 3D library, MIT license (full text below). Loaded from cdnjs.cloudflare.com.',
+'– czcionka, © 2019 The Baloo 2 Project Authors (github.com/EkType/Baloo2), Ek Type. Licencja SIL Open Font License 1.1 – dozwolone użycie komercyjne. Nie wolno sprzedawać samych plików czcionki. Ładowana z Google Fonts.':'– font, © 2019 The Baloo 2 Project Authors (github.com/EkType/Baloo2), Ek Type. SIL Open Font License 1.1 – commercial use allowed. The font files themselves may not be sold. Loaded from Google Fonts.',
+'(ikony narzędzi, materiałów i przycisków) – rysowane systemową czcionką emoji urządzenia (Apple, Google, Microsoft…). Ich wygląd należy do producenta systemu.':'(tool, material and button icons) – drawn with the device’s system emoji font (Apple, Google, Microsoft…). Their look belongs to the system maker.',
+'Pełny tekst licencji SIL OFL 1.1:':'Full text of the SIL OFL 1.1 license:','🎨 Zasoby własne gry':'🎨 The game’s own assets',
+'Modele 3D, tekstury, ikony materiałów i efekty są generowane kodem gry w czasie działania. Dźwięki są syntezowane w czasie gry na podstawie modeli fizycznych – gra nie zawiera nagrań ani zewnętrznych plików graficznych czy dźwiękowych. Kod gry powstał przy pomocy AI (Claude, Anthropic).':'3D models, textures, material icons and effects are generated by the game’s code while it runs. Sounds are synthesized during play from physical models – the game contains no recordings and no external image or sound files. The game’s code was written with the help of AI (Claude, Anthropic).',
+'🔒 Prywatność':'🔒 Privacy',
+'Gra nie zbiera danych osobowych, nie ma kont ani reklam. Postęp (ukończone etapy, liczba posiłków) zapisuje się tylko lokalnie na urządzeniu (localStorage). Przy uruchomieniu przeglądarka pobiera bibliotekę z cdnjs (Cloudflare) i czcionkę z Google Fonts, więc ci dostawcy widzą adres IP urządzenia.':'The game collects no personal data and has no accounts or ads. Progress (finished levels, number of meals) is saved only locally on the device (localStorage). On start, the browser downloads a library from cdnjs (Cloudflare) and a font from Google Fonts, so those providers can see the device’s IP address.',
+'✔ Zamknij':'✔ Close','użyj':'use','Bierzesz do ręki:':'You pick up:','Najpierw zdobądź kłody 🪵 – rąb powalone drzewa siekierą 🪓':'First get some logs 🪵 – chop fallen trees with the axe 🪓',
+'⬅️ Wstań':'⬅️ Stand up','🎸 Grasz na gitarze i nucisz piosenkę przy ognisku!':'🎸 You play the guitar and hum a campfire song!','⬅️ Wstań z hamaka':'⬅️ Get out of the hammock',
+'🏖️ Płyń do brzegu':'🏖️ Paddle to shore','🛶 Płyń joystickiem albo stuknij w wodę, dokąd chcesz popłynąć.':'🛶 Paddle with the joystick or tap the water where you want to go.',
+'🏖️ Płynę do brzegu…':'🏖️ Paddling to shore…','🐕 Burek merda ogonem – bardzo cię lubi!':'🐕 Buddy wags his tail – he really likes you!',
+'🐦 Nasypałeś ziarenek – zaraz przylecą ptaki!':'🐦 You poured some seeds – the birds will come soon!','🏖️ Wysiadłeś na brzeg.':'🏖️ You stepped onto the shore.',
+'Zbieraj materiały, zbuduj domek, udekoruj go i upiecz kolację przy ognisku!':'Collect materials, build a house, decorate it and cook dinner by the campfire!',
+'Pora roku':'Season','Lato':'Summer','Zima':'Winter','Co budujemy?':'What shall we build?','Domek na drzewie':'Tree house','Chatka z bali':'Log cabin','Domek na skale':'House on the rock',
+'Ziemianka w pagórku':'Hillside dugout','Domek nad wodą':'Lakeside house','Domek w jaskini':'Cave house','Ruszamy! 🪓':'Let’s go! 🪓','Idź spać':'Go to sleep',
+'Test: zbuduj od razu':'Test: build instantly','wersja':'version'
+};
+
+let LANG='pl';try{const o=JSON.parse(localStorage.getItem('lesnyDomek')||'{}');LANG=o.lang||((navigator.language||'pl').toLowerCase().startsWith('pl')?'pl':'en');}catch(e){LANG=(navigator.language||'pl').toLowerCase().startsWith('pl')?'pl':'en';}
+const TR_RE=(()=>{const ks=Object.keys(EN).sort((a,b)=>b.length-a.length),esc=k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),isL=c=>/\p{L}/u.test(c);
+  return new RegExp('(^|[^\\p{L}])('+ks.filter(k=>isL(k[0])).map(esc).join('|')+')(?=[^\\p{L}]|$)|('+ks.filter(k=>!isL(k[0])).map(esc).join('|')+')(?=[^\\p{L}]|$)','gu');})();
+function tr(s){return LANG==='en'&&typeof s==='string'&&s?s.replace(TR_RE,(m,a,k,k2)=>k2!==undefined?EN[k2]:a+EN[k]):s;}
+(()=>{const d=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');if(d&&d.set)Object.defineProperty(Element.prototype,'innerHTML',{configurable:true,enumerable:d.enumerable,get:d.get,set(v){d.set.call(this,tr(v));}});
+  const t=Object.getOwnPropertyDescriptor(Node.prototype,'textContent');if(t&&t.set)Object.defineProperty(Node.prototype,'textContent',{configurable:true,enumerable:t.enumerable,get:t.get,set(v){t.set.call(this,tr(v));}});})();
+const STAT=[];(()=>{const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(/\p{L}{2}/u.test(n.nodeValue))STAT.push([n,null,n.nodeValue]);}
+  document.querySelectorAll('[aria-label],[title]').forEach(e=>{for(const a of['aria-label','title'])if(e.hasAttribute(a))STAT.push([e,a,e.getAttribute(a)]);});})();
+const TITLE0=document.title;
+function applyStatic(){for(const [n,a,o] of STAT){if(a)n.setAttribute(a,tr(o));else n.nodeValue=tr(o);}document.title=LANG==='en'?'Forest Cabin – 3D game':TITLE0;document.documentElement.lang=LANG;const b=document.getElementById('bLang');if(b)b.textContent=LANG==='en'?'🇵🇱 Polski':'🇬🇧 English';}
+applyStatic();
 /* ================= HELPERS ================= */
 const $=s=>document.querySelector(s);
 const rnd=(a,b)=>a+Math.random()*(b-a);
@@ -904,16 +1026,24 @@ const P={g:null,pt:null,pos:V(.5,0,6.5),y:0,level:0,face:PI,walk:0,goal:null,cli
 let MIDTREES=[],FOREST=[],COL=[];
 function stepDone(i){return S.built||S.step>i;}
 function ladderOK(){return S.house==='tree'||S.house==='lake'?stepDone(1):S.house==='rock'?stepDone(0):false;}
+function soleG(mat){if(!soleG.geo){const sh=new THREE.Shape(),N=24;for(let k=0;k<=N;k++){const t=k/N*2*PI,c=Math.cos(t),sn=Math.sin(t);const front=sn>0,rx=front?.084:.077,rz=front?.15:.108,z=.035+sn*rz;const x=c*rx*(front?1:1);k?sh.lineTo(x,z):sh.moveTo(x,z);}
+  const g=new THREE.ExtrudeGeometry(sh,{depth:.032,bevelEnabled:true,bevelThickness:.006,bevelSize:.006,bevelSegments:2,curveSegments:4});g.rotateX(PI/2);g.translate(0,-.083,0);soleG.geo=g;}
+  return new THREE.Mesh(soleG.geo,mat);}
 function mkPlayer(){const g=new THREE.Group(),pt={},win=W();
-  const skin=M('#f2c6a0'),hair=M('#6b4226'),pants=M(win?'#3a4660':'#5c6b3a'),boot=M('#5a3519'),sole=M('#2b1a0e'),leather=M('#7a5530'),
+  const skin=M('#f2c6a0'),hair=M('#6b4226'),pants=M(win?'#3a4660':'#5c6b3a'),boot=M('#5a3519'),bootT=M('#4a2b13'),sole=M('#2b1a0e'),leather=M('#7a5530'),
     jk=M(win?'#c8402e':'#4f7f3a'),jk2=M(win?'#a3311f':'#3d6630'),pack=M('#8a6236'),packD=M('#6a4826'),roll=M(win?'#2f5f8a':'#3f6b3a');
   // nogi z kolanami i butami
   const leg=x=>{const hip=new THREE.Group();hip.position.set(x,.76,0);hip.add(cyl(V(0,0,0),V(0,-.35,0),.09,pants,9,.078));hip.add(sph(.09,pants,0,0,0,9,6));
     const knee=new THREE.Group();knee.position.y=-.35;hip.add(knee);knee.add(sph(.078,pants,0,0,0,8,6));knee.add(cyl(V(0,0,0),V(0,-.3,0),.078,pants,9,.066));
     const bt=new THREE.Group();bt.position.y=-.31;knee.add(bt);
-    const b1=box(.15,.14,.19,boot);b1.position.set(0,-.02,.01);bt.add(b1);const toe=sph(.076,boot,0,-.05,.1,10,6);toe.scale.set(1,.72,1.1);bt.add(toe);
-    const so=box(.16,.035,.3,sole);so.position.set(0,-.1,.04);bt.add(so);bt.add(cyl(V(0,.04,0),V(0,.1,0),.082,leather,9));
-    for(let k=0;k<3;k++){const l=box(.07,.008,.01,M('#e8d8b0'));l.position.set(0,.0-k*.035,.105);bt.add(l);}
+    bt.add(cyl(V(0,-.075,0),V(0,.085,0),.074,boot,12,.079));
+    const up=sph(1,boot,0,-.062,.05,14,10);up.scale.set(.079,.058,.125);bt.add(up);
+    const tc=sph(1,bootT,0,-.072,.115,12,8);tc.scale.set(.074,.044,.07);bt.add(tc);
+    const hl=sph(1,bootT,0,-.07,-.03,10,8);hl.scale.set(.074,.05,.05);bt.add(hl);
+    bt.add(soleG(sole));
+    const cuff=new THREE.Mesh(new THREE.TorusGeometry(.078,win?.024:.016,8,16),win?M('#f1ebe0'):leather);cuff.rotation.x=PI/2;cuff.position.y=.088;bt.add(cuff);
+    const lc=M('#e8d8b0');for(let k=0;k<4;k++){const y=.06-k*.034,z=k<3?.077:.093;const l=box(.055,.009,.008,lc);l.position.set(0,y,z);l.rotation.x=k<3?0:-.7;bt.add(l);for(const sx of[-1,1])bt.add(sph(.006,MT.metal,sx*.03,y,z-.002,5,4));}
+    const tg=box(.05,.06,.012,boot);tg.position.set(0,.105,-.07);tg.rotation.x=.25;bt.add(tg);
     g.add(hip);return{hip,knee};};
   const LL=leg(.1),LR=leg(-.1);pt.lL=LL.hip;pt.kL=LL.knee;pt.lR=LR.hip;pt.kR=LR.knee;
   // tułów
@@ -1522,7 +1652,7 @@ $('#bMenu').addEventListener('click',()=>{
 
 
 /* ================= VERSION & LICENSE ================= */
-const VERSION='0.0.86';
+const VERSION='0.0.88';
 const RELEASE='2026-11-20';
 const MIT_THREE=`The MIT License
 
@@ -1558,6 +1688,7 @@ function showInfo(){
   </div>`,[{t:'✔ Zamknij',c:'green'}]);}
 $('#bInfo').addEventListener('click',()=>{showInfo();});
 $('#ver').textContent='wersja '+VERSION;
+$('#bLang').addEventListener('click',()=>{LANG=LANG==='en'?'pl':'en';SAVE.lang=LANG;store();applyStatic();$('#ver').textContent='wersja '+VERSION;try{renderTools();renderInv();refreshToggles();const h=$('#hint');if(h)h.dataset.t='';}catch(e){}});
 
 /* ================= INPUT ================= */
 const PC=matchMedia('(hover: hover) and (pointer: fine)').matches;
